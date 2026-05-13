@@ -3,7 +3,9 @@ const addButton = document.getElementById("addButton");
 const taskList = document.getElementById("taskList");
 const errorText = document.getElementById("errorText");
 
-let tasks = [];
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+renderTasks();
 
 addButton.addEventListener("click", function () {
   addTask();
@@ -34,6 +36,7 @@ function addTask() {
   taskInput.value = "";
   errorText.textContent = "";
 
+  saveTasks();
   renderTasks();
 }
 
@@ -55,6 +58,7 @@ function renderTasks() {
 
     span.addEventListener("click", function () {
       task.completed = !task.completed;
+      saveTasks();
       renderTasks();
     });
 
@@ -78,5 +82,10 @@ function deleteTask(id) {
     return task.id !== id;
   });
 
+  saveTasks();
   renderTasks();
+}
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
